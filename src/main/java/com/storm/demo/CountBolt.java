@@ -32,6 +32,10 @@ public class CountBolt implements IRichBolt{
             counters.put(str, c);
         }
 
+        for(Map.Entry<String, Integer> entry:counters.entrySet()){
+            System.out.println(entry.getKey()+" : " + entry.getValue());
+        }
+
         collector.ack(input);
     }
 

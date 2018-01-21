@@ -1,4 +1,6 @@
+.gitignore
 .idea/*
 .out/*
 .target/*
+classes/*
 *.iml
