@@ -18,6 +18,7 @@ public class CountBolt implements IRichBolt{
                         OutputCollector collector) {
         this.counters = new HashMap<String, Integer>();
         this.collector = collector;
+
     }
 
     @Override
