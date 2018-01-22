@@ -1,24 +1,33 @@
 package com.storm.demo;
 
-import java.util.Map;
-import java.util.HashMap;
-
-import org.apache.storm.tuple.Tuple;
 import org.apache.storm.task.OutputCollector;
-import org.apache.storm.topology.OutputFieldsDeclarer;
-import org.apache.storm.topology.IRichBolt;
 import org.apache.storm.task.TopologyContext;
+import org.apache.storm.topology.IRichBolt;
+import org.apache.storm.topology.OutputFieldsDeclarer;
+import org.apache.storm.tuple.Tuple;
+
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class CountBolt implements IRichBolt{
     Map<String, Integer> counters;
     private OutputCollector collector;
+    private FileWriter fileWriter;
+    private BufferedWriter bufferedWriter;
 
     @Override
     public void prepare(Map stormConf, TopologyContext context,
                         OutputCollector collector) {
         this.counters = new HashMap<String, Integer>();
         this.collector = collector;
-
+        try {
+            fileWriter = new FileWriter("/home/ec2-user/KafkaStormOutput.log", true);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -32,6 +41,14 @@ public class CountBolt implements IRichBolt{
             counters.put(str, c);
         }
 
+        try {
+            bufferedWriter = new BufferedWriter(fileWriter);
+            bufferedWriter.write(str + " : " + counters.get(str));
+            bufferedWriter.newLine();
+            bufferedWriter.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         for(Map.Entry<String, Integer> entry:counters.entrySet()){
             System.out.println(entry.getKey()+" : " + entry.getValue());
         }
@@ -41,8 +58,10 @@ public class CountBolt implements IRichBolt{
 
     @Override
     public void cleanup() {
-        for(Map.Entry<String, Integer> entry:counters.entrySet()){
-            System.out.println(entry.getKey()+" : " + entry.getValue());
+        try {
+            bufferedWriter.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

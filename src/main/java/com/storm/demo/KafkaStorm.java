@@ -28,8 +28,8 @@ public class KafkaStorm {
 
         TopologyBuilder builder = new TopologyBuilder();
         builder.setSpout("kafka-spout", new KafkaSpout(kafkaSpoutConfig));
-        builder.setBolt("word-spitter", new SplitBolt()).shuffleGrouping("kafka-spout");
-        builder.setBolt("word-counter", new CountBolt()).shuffleGrouping("word-spitter");
+        builder.setBolt("word-splitter", new SplitBolt()).shuffleGrouping("kafka-spout");
+        builder.setBolt("word-counter", new CountBolt()).shuffleGrouping("word-splitter");
 
         //System.setProperty("storm.jar", "/home/ec2-user/KafkaStorm.jar");
         StormSubmitter.submitTopology("KafkaStorm", config, builder.createTopology());
