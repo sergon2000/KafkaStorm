@@ -26,7 +26,7 @@ public class LogAnalyserStorm {
         builder.setBolt("call-log-counter-bolt", new CallLogCounterBolt())
                 .fieldsGrouping("call-log-creator-bolt", new Fields("call"));
 
-        System.setProperty("storm.jar", "/home/ec2-user/KafkaStorm.jar");
+        //System.setProperty("storm.jar", "/home/ec2-user/KafkaStorm.jar");
         StormSubmitter.submitTopology("KafkaStorm", config, builder.createTopology());
     }
 }

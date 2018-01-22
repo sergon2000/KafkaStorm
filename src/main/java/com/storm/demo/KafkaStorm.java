@@ -31,7 +31,7 @@ public class KafkaStorm {
         builder.setBolt("word-spitter", new SplitBolt()).shuffleGrouping("kafka-spout");
         builder.setBolt("word-counter", new CountBolt()).shuffleGrouping("word-spitter");
 
-        System.setProperty("storm.jar", "/home/ec2-user/KafkaStorm.jar");
+        //System.setProperty("storm.jar", "/home/ec2-user/KafkaStorm.jar");
         StormSubmitter.submitTopology("KafkaStorm", config, builder.createTopology());
     }
 }
